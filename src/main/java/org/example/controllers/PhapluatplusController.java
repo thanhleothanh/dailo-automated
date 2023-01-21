@@ -7,15 +7,12 @@ import org.example.utils.PhapluatplusConstants;
 
 public class PhapluatplusController extends AbstractController<PhapluatplusArticle> {
 
-  public static ArticleProvider provider = ArticleProvider.PHAPLUATPLUS;
-
   public PhapluatplusController() {
-    super();
+    super(ArticleProvider.PHAPLUATPLUS);
   }
 
   @Override
   protected void doSetVariables() {
-    this.setProvider(provider);
     this.setHEADER_LOCATOR(PhapluatplusConstants.PHAPLUATPLUS_HEADER);
     this.setDESCRIPTION_LOCATOR(PhapluatplusConstants.PHAPLUATPLUS_DESCRIPTION);
     this.setCONTENT_LOCATOR_FROM(PhapluatplusConstants.PHAPLUATPLUS_CONTENT_FROM);
@@ -24,8 +21,9 @@ public class PhapluatplusController extends AbstractController<PhapluatplusArtic
 
   @Override
   public void initData() {
-    ArticleCategory category = ArticleCategory.BANDOC;
-    this.articleList.add(new PhapluatplusArticle("", category));
+    ArticleCategory category = ArticleCategory.DOISONGXAHOI;
+    this.articleList.add(new PhapluatplusArticle("", ArticleCategory.KINHTE));
+    this.articleList.add(new PhapluatplusArticle("", ArticleCategory.GIAOTHONGVANTAI));
   }
 
   @Override

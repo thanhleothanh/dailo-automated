@@ -22,7 +22,8 @@ public abstract class AbstractController<T extends Article> implements Automatio
   private String CONTENT_LOCATOR_FROM;
   private String CONTENT_LOCATOR_TO;
 
-  protected AbstractController() {
+  protected AbstractController(ArticleProvider provider) {
+    this.provider = provider;
     this.chromeDriverService = new ChromeDriverService();
     this.dailoSite = chromeDriverService.getBrowser().newPage();
     this.newsSite = chromeDriverService.getBrowser().newPage();
@@ -35,7 +36,11 @@ public abstract class AbstractController<T extends Article> implements Automatio
     initNewsSite();
     for (T article : articleList) {
       if (provider.equals(article.getProvider())) {
-        runProcess(article);
+        try {
+          runProcess(article);
+        } catch (Exception e) {
+          System.out.println(e.getMessage());
+        }
       }
     }
     chromeDriverService.getBrowser().close();
