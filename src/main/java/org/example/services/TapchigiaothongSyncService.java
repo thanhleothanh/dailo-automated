@@ -1,13 +1,13 @@
-package org.example.controllers;
+package org.example.services;
 
 import org.example.enums.ArticleCategory;
 import org.example.enums.ArticleProvider;
 import org.example.models.TapchigiaothongArticle;
 import org.example.utils.TapchigiaothongConstants;
 
-public class TapchigiaothongController extends AbstractController<TapchigiaothongArticle> {
+public class TapchigiaothongSyncService extends AbstractSyncService<TapchigiaothongArticle> {
 
-  public TapchigiaothongController() {
+  public TapchigiaothongSyncService() {
     super(ArticleProvider.TAPCHIGIAOTHONG);
   }
 
@@ -20,7 +20,7 @@ public class TapchigiaothongController extends AbstractController<Tapchigiaothon
   }
 
   @Override
-  public void initData() {
+  protected void initData() {
     ArticleCategory category = ArticleCategory.GIAOTHONGVANTAI;
     this.articleList.add(new TapchigiaothongArticle("", category));
     this.articleList.add(new TapchigiaothongArticle("", category));
@@ -33,7 +33,7 @@ public class TapchigiaothongController extends AbstractController<Tapchigiaothon
   }
 
   @Override
-  public void initNewsSite() {
+  protected void initNewsSite() {
     chromeDriverService.openUrl(this.newsSite, TapchigiaothongConstants.TAPCHIGIAOTHONG_URL);
   }
 }

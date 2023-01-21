@@ -1,13 +1,15 @@
 package org.example;
 
+import org.example.services.VietnamplusSyncService;
+
 public class Main {
 
   public static void main(String[] args) {
-//    PhapluatplusController phapluatplusController = new PhapluatplusController();
-//    phapluatplusController.doProcess();
-//    VietnamplusController vietnamplusController = new VietnamplusController();
-//    vietnamplusController.doProcess();
-//    TapchigiaothongController tapchigiaothongController = new TapchigiaothongController();
-//    tapchigiaothongController.doProcess();
+//    PhapluatplusSyncService service = new PhapluatplusSyncService();
+//    service.doProcess();
+    VietnamplusSyncService service = new VietnamplusSyncService();
+    service.doProcess();
+//    TapchigiaothongSyncService service = new TapchigiaothongSyncService();
+//    service.doProcess();
   }
 }

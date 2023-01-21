@@ -1,10 +1,9 @@
-package org.example.controllers;
+package org.example.services;
 
 import org.example.models.Article;
 
 public interface AutomationProcess<T extends Article> {
-  void initDailo();
-  void initData();
-  void initNewsSite();
+  void beforeProcess();
   void runProcess(T article);
+  void afterProcess();
 }

@@ -1,13 +1,13 @@
-package org.example.controllers;
+package org.example.services;
 
 import org.example.enums.ArticleCategory;
 import org.example.enums.ArticleProvider;
 import org.example.models.PhapluatplusArticle;
 import org.example.utils.PhapluatplusConstants;
 
-public class PhapluatplusController extends AbstractController<PhapluatplusArticle> {
+public class PhapluatplusSyncService extends AbstractSyncService<PhapluatplusArticle> {
 
-  public PhapluatplusController() {
+  public PhapluatplusSyncService() {
     super(ArticleProvider.PHAPLUATPLUS);
   }
 
@@ -20,7 +20,7 @@ public class PhapluatplusController extends AbstractController<PhapluatplusArtic
   }
 
   @Override
-  public void initData() {
+  protected void initData() {
     ArticleCategory category = ArticleCategory.DOISONGXAHOI;
     this.articleList.add(new PhapluatplusArticle("", category));
     this.articleList.add(new PhapluatplusArticle("", category));
@@ -32,7 +32,7 @@ public class PhapluatplusController extends AbstractController<PhapluatplusArtic
   }
 
   @Override
-  public void initNewsSite() {
+  protected void initNewsSite() {
     chromeDriverService.openUrl(this.newsSite, PhapluatplusConstants.PHAPLUATPLUS_URL);
   }
 }

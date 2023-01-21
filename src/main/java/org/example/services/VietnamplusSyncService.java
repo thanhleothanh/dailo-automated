@@ -1,13 +1,13 @@
-package org.example.controllers;
+package org.example.services;
 
 import org.example.enums.ArticleCategory;
 import org.example.enums.ArticleProvider;
 import org.example.models.VietnamplusArticle;
 import org.example.utils.VietnamplusConstants;
 
-public class VietnamplusController extends AbstractController<VietnamplusArticle> {
+public class VietnamplusSyncService extends AbstractSyncService<VietnamplusArticle> {
 
-  public VietnamplusController() {
+  public VietnamplusSyncService() {
     super(ArticleProvider.VIETNAMPLUS);
   }
 
@@ -20,7 +20,7 @@ public class VietnamplusController extends AbstractController<VietnamplusArticle
   }
 
   @Override
-  public void initData() {
+  protected void initData() {
     ArticleCategory category = ArticleCategory.DOISONGXAHOI;
     this.articleList.add(new VietnamplusArticle("", category));
     this.articleList.add(new VietnamplusArticle("", category));
@@ -34,7 +34,7 @@ public class VietnamplusController extends AbstractController<VietnamplusArticle
   }
 
   @Override
-  public void initNewsSite() {
+  protected void initNewsSite() {
     chromeDriverService.openUrl(this.newsSite, VietnamplusConstants.VIETNAMPLUS_URL);
     chromeDriverService.clickOnLocator(this.newsSite, VietnamplusConstants.VIETNAMPLUS_MOBILE_SWITCH);
   }
