@@ -94,9 +94,9 @@ public abstract class AbstractController<T extends Article> implements Automatio
   }
 
   private void submitArticle() {
-    chromeDriverService.clickOnLocator(dailoSite, DailoConstants.DAILO_SUBMIT_BUTTON);
+    //time wait for upload image and submit
     try {
-      Thread.sleep(3500L);
+      Thread.sleep(7000L);
     } catch (InterruptedException e) {
       throw new RuntimeException(e);
     }

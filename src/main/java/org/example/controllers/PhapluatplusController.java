@@ -22,8 +22,13 @@ public class PhapluatplusController extends AbstractController<PhapluatplusArtic
   @Override
   public void initData() {
     ArticleCategory category = ArticleCategory.DOISONGXAHOI;
-    this.articleList.add(new PhapluatplusArticle("", ArticleCategory.KINHTE));
-    this.articleList.add(new PhapluatplusArticle("", ArticleCategory.GIAOTHONGVANTAI));
+    this.articleList.add(new PhapluatplusArticle("", category));
+    this.articleList.add(new PhapluatplusArticle("", category));
+    this.articleList.add(new PhapluatplusArticle("", category));
+    this.articleList.add(new PhapluatplusArticle("", category));
+    this.articleList.add(new PhapluatplusArticle("", category));
+    this.articleList.add(new PhapluatplusArticle("", category));
+    this.articleList.add(new PhapluatplusArticle("", category));
   }
 
   @Override

@@ -24,6 +24,13 @@ public class VietnamplusController extends AbstractController<VietnamplusArticle
     ArticleCategory category = ArticleCategory.DOISONGXAHOI;
     this.articleList.add(new VietnamplusArticle("", category));
     this.articleList.add(new VietnamplusArticle("", category));
+    this.articleList.add(new VietnamplusArticle("", category));
+    this.articleList.add(new VietnamplusArticle("", category));
+    this.articleList.add(new VietnamplusArticle("", category));
+    this.articleList.add(new VietnamplusArticle("", category));
+    this.articleList.add(new VietnamplusArticle("", category));
+    this.articleList.add(new VietnamplusArticle("", category));
+    this.articleList.add(new VietnamplusArticle("", category));
   }
 
   @Override
