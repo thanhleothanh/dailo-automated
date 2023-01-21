@@ -1,16 +1,16 @@
-package org.example.controllers;
+package org.example.services;
 
 import com.microsoft.playwright.Page;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import lombok.Data;
 import org.example.enums.ArticleProvider;
 import org.example.models.Article;
-import org.example.services.ChromeDriverService;
 import org.example.utils.DailoConstants;
 
 @Data
-public abstract class AbstractController<T extends Article> implements AutomationProcess<T> {
+public abstract class AbstractSyncService<T extends Article> implements AutomationProcess<T> {
 
   protected ChromeDriverService chromeDriverService;
   protected Page dailoSite;
@@ -21,51 +21,79 @@ public abstract class AbstractController<T extends Article> implements Automatio
   private String DESCRIPTION_LOCATOR;
   private String CONTENT_LOCATOR_FROM;
   private String CONTENT_LOCATOR_TO;
+  private final double DEFAULT_TIMEOUT = 25000.0;
+  private final long DEFAULT_WAIT_FOR_SUBMIT = 7000L;
 
-  protected AbstractController(ArticleProvider provider) {
+  protected AbstractSyncService(ArticleProvider provider) {
     this.provider = provider;
     this.chromeDriverService = new ChromeDriverService();
     this.dailoSite = chromeDriverService.getBrowser().newPage();
+    this.dailoSite.setDefaultNavigationTimeout(DEFAULT_TIMEOUT);
+    this.dailoSite.setDefaultTimeout(DEFAULT_TIMEOUT);
     this.newsSite = chromeDriverService.getBrowser().newPage();
+    this.newsSite.setDefaultNavigationTimeout(DEFAULT_TIMEOUT);
+    this.newsSite.setDefaultTimeout(DEFAULT_TIMEOUT);
   }
 
   public void doProcess() {
     doSetVariables();
-    initData();
-    initDailo();
-    initNewsSite();
+    beforeProcess();
     for (T article : articleList) {
-      if (provider.equals(article.getProvider())) {
+      boolean processed = false;
+      while (!processed) {
         try {
           runProcess(article);
+          processed = true;
         } catch (Exception e) {
           System.out.println(e.getMessage());
         }
       }
     }
-    chromeDriverService.getBrowser().close();
+    afterProcess();
+  }
+
+  protected abstract void initData();
+
+  protected abstract void initNewsSite();
+
+  protected void initDailo() {
+    chromeDriverService.openUrl(this.dailoSite, DailoConstants.DAILO_URL);
+    chromeDriverService.inputIntoLocator(this.dailoSite, DailoConstants.DAILO_USERNAME, DailoConstants.DAILO_USERNAME_VALUE);
+    chromeDriverService.inputIntoLocator(this.dailoSite, DailoConstants.DAILO_PASSWORD, DailoConstants.DAILO_PASSWORD_VALUE);
+    chromeDriverService.clickOnLocator(this.dailoSite, DailoConstants.DAILO_LOGIN_BUTTON);
   }
 
   protected abstract void doSetVariables();
 
   @Override
-  public void initDailo() {
-    chromeDriverService.openUrl(this.dailoSite, DailoConstants.DAILO_URL);
-    chromeDriverService.inputIntoLocator(this.dailoSite, DailoConstants.DAILO_USERNAME, DailoConstants.DAILO_USERNAME_VALUE);
-    chromeDriverService.inputIntoLocator(this.dailoSite, DailoConstants.DAILO_PASSWORD, DailoConstants.DAILO_PASSWORD_VALUE);
-    chromeDriverService.clickOnLocator(this.dailoSite, DailoConstants.DAILO_LOGIN_BUTTON);
-    chromeDriverService.openUrl(this.dailoSite, DailoConstants.DAILO_URL);
+  public void beforeProcess() {
+    initData();
+    initDailo();
+    initNewsSite();
   }
 
   @Override
   public void runProcess(T article) {
-    chromeDriverService.openUrl(this.dailoSite, DailoConstants.DAILO_URL);
+    if (!provider.equals(article.getProvider())) {
+      System.out.println("invalid article being processed! check your article provider!");
+      return;
+    }
+    if (Objects.nonNull(article.getUrl())) {
+      System.out.println("url not found!");
+      return;
+    }
     chromeDriverService.openUrl(this.newsSite, article.getUrl());
+    chromeDriverService.openUrl(this.dailoSite, DailoConstants.DAILO_URL);
     inputHeader();
     selectCategory(article.getCategory().getValue());
     inputDescription();
     inputContent();
     submitArticle();
+  }
+
+  @Override
+  public void afterProcess() {
+    chromeDriverService.getBrowser().close();
   }
 
   private void inputHeader() {
@@ -96,7 +124,7 @@ public abstract class AbstractController<T extends Article> implements Automatio
   private void submitArticle() {
     //time wait for upload image and submit
     try {
-      Thread.sleep(7000L);
+      Thread.sleep(DEFAULT_WAIT_FOR_SUBMIT);
     } catch (InterruptedException e) {
       throw new RuntimeException(e);
     }
