@@ -22,7 +22,6 @@ public abstract class AbstractSyncService<T extends Article> implements Automati
   private String CONTENT_LOCATOR_FROM;
   private String CONTENT_LOCATOR_TO;
   private final double DEFAULT_TIMEOUT = 25000.0;
-  private final long DEFAULT_WAIT_FOR_SUBMIT = 7000L;
 
   protected AbstractSyncService(ArticleProvider provider) {
     this.provider = provider;
@@ -39,14 +38,10 @@ public abstract class AbstractSyncService<T extends Article> implements Automati
     doSetVariables();
     beforeProcess();
     for (T article : articleList) {
-      boolean processed = false;
-      while (!processed) {
-        try {
-          runProcess(article);
-          processed = true;
-        } catch (Exception e) {
-          System.out.println(e.getMessage());
-        }
+      try {
+        runProcess(article);
+      } catch (Exception e) {
+        System.err.println(e.getMessage());
       }
     }
     afterProcess();
@@ -61,6 +56,7 @@ public abstract class AbstractSyncService<T extends Article> implements Automati
     chromeDriverService.inputIntoLocator(this.dailoSite, DailoConstants.DAILO_USERNAME, DailoConstants.DAILO_USERNAME_VALUE);
     chromeDriverService.inputIntoLocator(this.dailoSite, DailoConstants.DAILO_PASSWORD, DailoConstants.DAILO_PASSWORD_VALUE);
     chromeDriverService.clickOnLocator(this.dailoSite, DailoConstants.DAILO_LOGIN_BUTTON);
+    chromeDriverService.openUrl(this.dailoSite, DailoConstants.DAILO_URL);
   }
 
   protected abstract void doSetVariables();
@@ -78,12 +74,11 @@ public abstract class AbstractSyncService<T extends Article> implements Automati
       System.out.println("invalid article being processed! check your article provider!");
       return;
     }
-    if (Objects.nonNull(article.getUrl())) {
+    if (Objects.isNull(article.getUrl())) {
       System.out.println("url not found!");
       return;
     }
     chromeDriverService.openUrl(this.newsSite, article.getUrl());
-    chromeDriverService.openUrl(this.dailoSite, DailoConstants.DAILO_URL);
     inputHeader();
     selectCategory(article.getCategory().getValue());
     inputDescription();
@@ -122,11 +117,7 @@ public abstract class AbstractSyncService<T extends Article> implements Automati
   }
 
   private void submitArticle() {
-    //time wait for upload image and submit
-    try {
-      Thread.sleep(DEFAULT_WAIT_FOR_SUBMIT);
-    } catch (InterruptedException e) {
-      throw new RuntimeException(e);
-    }
+    //wait for upload image and submit, debug point here
+    System.out.println("done!");
   }
 }

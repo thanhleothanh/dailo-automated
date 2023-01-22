@@ -29,8 +29,6 @@ public class VietnamplusSyncService extends AbstractSyncService<VietnamplusArtic
     this.articleList.add(new VietnamplusArticle("", category));
     this.articleList.add(new VietnamplusArticle("", category));
     this.articleList.add(new VietnamplusArticle("", category));
-    this.articleList.add(new VietnamplusArticle("", category));
-    this.articleList.add(new VietnamplusArticle("", category));
   }
 
   @Override
