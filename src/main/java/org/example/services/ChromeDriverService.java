@@ -14,9 +14,7 @@ public class ChromeDriverService implements AutoCloseable, KeyboardActions {
 
   public ChromeDriverService() {
     playWrightInstance = Playwright.create();
-    LaunchOptions options = new LaunchOptions();
-    options.setHeadless(false);
-    browser = playWrightInstance.chromium().launch(options);
+    browser = playWrightInstance.chromium().launch(new LaunchOptions().setHeadless(false));
   }
 
   public void openUrl(Page page, String url) {
