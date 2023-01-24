@@ -1,26 +1,24 @@
 package org.example.services;
 
 import com.microsoft.playwright.Page;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
+import java.util.Scanner;
 import lombok.Data;
 import org.example.enums.ArticleProvider;
-import org.example.models.Article;
 import org.example.utils.DailoConstants;
 
 @Data
-public abstract class AbstractSyncService<T extends Article> implements AutomationProcess<T> {
+public abstract class AbstractSyncService implements AutomationProcess {
 
   protected ChromeDriverService chromeDriverService;
+  private ArticleProvider provider;
   protected Page dailoSite;
   protected Page newsSite;
-  protected List<T> articleList = new ArrayList<>();
-  private ArticleProvider provider;
   private String HEADER_LOCATOR;
   private String DESCRIPTION_LOCATOR;
   private String CONTENT_LOCATOR_FROM;
   private String CONTENT_LOCATOR_TO;
+  private final String QUIT_KEYWORD = "QUIT";
   private final double DEFAULT_TIMEOUT = 25000.0;
 
   protected AbstractSyncService(ArticleProvider provider) {
@@ -37,17 +35,9 @@ public abstract class AbstractSyncService<T extends Article> implements Automati
   public void doProcess() {
     doSetVariables();
     beforeProcess();
-    for (T article : articleList) {
-      try {
-        runProcess(article);
-      } catch (Exception e) {
-        System.err.println(e.getMessage());
-      }
-    }
+    runProcess();
     afterProcess();
   }
-
-  protected abstract void initData();
 
   protected abstract void initNewsSite();
 
@@ -63,27 +53,30 @@ public abstract class AbstractSyncService<T extends Article> implements Automati
 
   @Override
   public void beforeProcess() {
-    initData();
     initDailo();
     initNewsSite();
   }
 
   @Override
-  public void runProcess(T article) {
-    if (!provider.equals(article.getProvider())) {
-      System.out.println("invalid article being processed! check your article provider!");
-      return;
+  public void runProcess() {
+    try (Scanner in = new Scanner(System.in)) {
+      while (true) {
+        System.out.printf("Enter %s's url (\"quit\" to exterminate the process): ", provider.getName());
+        String url = in.nextLine();
+        if (Objects.isNull(url) || url.trim().equalsIgnoreCase(QUIT_KEYWORD)) {
+          return;
+        }
+        try {
+          chromeDriverService.openUrl(this.newsSite, url.trim());
+          inputHeader();
+          inputDescription();
+          inputContent();
+        } catch (Exception e) {
+          System.out.println("Something wrong!");
+          System.out.println(e.getMessage());
+        }
+      }
     }
-    if (Objects.isNull(article.getUrl())) {
-      System.out.println("url not found!");
-      return;
-    }
-    chromeDriverService.openUrl(this.newsSite, article.getUrl());
-    inputHeader();
-    selectCategory(article.getCategory().getValue());
-    inputDescription();
-    inputContent();
-    submitArticle();
   }
 
   @Override
@@ -94,11 +87,6 @@ public abstract class AbstractSyncService<T extends Article> implements Automati
   private void inputHeader() {
     chromeDriverService.copyInLocator(this.newsSite, HEADER_LOCATOR);
     chromeDriverService.pasteToLocator(this.dailoSite, DailoConstants.DAILO_HEADER);
-  }
-
-  private void selectCategory(Integer dataOptionArrayIndex) {
-    chromeDriverService.clickOnLocator(dailoSite, DailoConstants.DAILO_CATEGORY);
-    chromeDriverService.clickOnLocator(dailoSite, String.format(DailoConstants.DAILO_CATEGORY_OPTIONS, dataOptionArrayIndex.toString()));
   }
 
   private void inputDescription() {
@@ -114,10 +102,5 @@ public abstract class AbstractSyncService<T extends Article> implements Automati
         DailoConstants.DAILO_CONTENT_IFRAME,
         DailoConstants.DAILO_CONTENT_IFRAME_BODY,
         newsSite.url());
-  }
-
-  private void submitArticle() {
-    //wait for upload image and submit, debug point here
-    System.out.println("done!");
   }
 }
