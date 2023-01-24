@@ -17,15 +17,15 @@ public enum ArticleProvider {
   private final String name;
 
   public static ArticleProvider of(String name) {
-    return
-        Stream.of(ArticleProvider.values())
-            .filter(c -> c.getName().equalsIgnoreCase(name))
-            .findFirst()
-            .orElseThrow(() -> new RuntimeException("Cant seem to find this provider!"));
+    return Stream.of(ArticleProvider.values())
+        .filter(c -> c.getName().equalsIgnoreCase(name))
+        .findFirst()
+        .orElseThrow(() -> new RuntimeException("Cant seem to find this provider!"));
   }
 
-
   public static List<String> getArticleProviderNames() {
-    return Arrays.stream(ArticleProvider.values()).map(ArticleProvider::getName).collect(Collectors.toList());
+    return Arrays.stream(ArticleProvider.values())
+        .map(ArticleProvider::getName)
+        .collect(Collectors.toList());
   }
 }

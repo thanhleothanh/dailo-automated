@@ -9,18 +9,19 @@ import org.example.utils.Constants;
 import org.example.utils.DailoConstants;
 
 @Data
-public abstract class AbstractSyncService implements AutomationProcess {
+public abstract class AbstractAutomateService implements AutomationProcess {
 
   protected ChromeDriverService chromeDriverService;
-  private ArticleProvider provider;
   protected Page dailoSite;
   protected Page newsSite;
+  private ArticleProvider provider;
+  private String NEWS_SITE_URL;
   private String HEADER_LOCATOR;
   private String DESCRIPTION_LOCATOR;
   private String CONTENT_LOCATOR_FROM;
   private String CONTENT_LOCATOR_TO;
 
-  protected AbstractSyncService(ArticleProvider provider) {
+  protected AbstractAutomateService(ArticleProvider provider) {
     this.provider = provider;
     this.chromeDriverService = new ChromeDriverService();
   }
@@ -36,21 +37,10 @@ public abstract class AbstractSyncService implements AutomationProcess {
 
   @Override
   public void beforeProcess() {
-    initBlankPages();
-    initDailo();
-    initNewsSite();
-  }
-
-  protected void initBlankPages() {
     this.dailoSite = chromeDriverService.getBrowser().newPage();
-    this.dailoSite.setDefaultNavigationTimeout(Constants.DEFAULT_TIMEOUT);
-    this.dailoSite.setDefaultTimeout(Constants.DEFAULT_TIMEOUT);
     this.newsSite = chromeDriverService.getBrowser().newPage();
     this.newsSite.setDefaultNavigationTimeout(Constants.DEFAULT_TIMEOUT);
     this.newsSite.setDefaultTimeout(Constants.DEFAULT_TIMEOUT);
-  }
-
-  protected void initDailo() {
     chromeDriverService.openUrl(this.dailoSite, DailoConstants.DAILO_URL);
     chromeDriverService.inputIntoLocator(this.dailoSite, DailoConstants.DAILO_USERNAME, DailoConstants.DAILO_USERNAME_VALUE);
     chromeDriverService.inputIntoLocator(this.dailoSite, DailoConstants.DAILO_PASSWORD, DailoConstants.DAILO_PASSWORD_VALUE);
@@ -58,13 +48,12 @@ public abstract class AbstractSyncService implements AutomationProcess {
     chromeDriverService.openUrl(this.dailoSite, DailoConstants.DAILO_URL);
   }
 
-  protected abstract void initNewsSite();
 
   @Override
   public void runProcess() {
     try (Scanner in = new Scanner(System.in)) {
       System.out.println();
-      System.out.printf("-------------------------------%s------------------------------\n", provider.getName());
+      System.out.printf("-------------------------------%s-------------------------------\n", provider.getName());
       int counter = 0;
       while (true) {
         System.out.printf("(Processed: %s) Enter url, \"exit\" to exit: ", counter);
@@ -79,8 +68,8 @@ public abstract class AbstractSyncService implements AutomationProcess {
           inputContent();
           counter++;
         } catch (Exception e) {
-          System.out.println();
           System.err.println(e.getMessage());
+          System.out.println();
         }
       }
     }

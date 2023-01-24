@@ -6,6 +6,7 @@ import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Locator.ClickOptions;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.Playwright;
+import com.microsoft.playwright.options.LoadState;
 
 public class ChromeDriverService implements AutoCloseable, KeyboardActions {
 
@@ -19,6 +20,7 @@ public class ChromeDriverService implements AutoCloseable, KeyboardActions {
 
   public void openUrl(Page page, String url) {
     page.navigate(url);
+    page.waitForLoadState(LoadState.DOMCONTENTLOADED);
   }
 
   public void inputIntoLocator(Page page, String uniqueLocator, String input) {
