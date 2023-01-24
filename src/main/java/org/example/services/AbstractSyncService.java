@@ -5,6 +5,7 @@ import java.util.Objects;
 import java.util.Scanner;
 import lombok.Data;
 import org.example.enums.ArticleProvider;
+import org.example.utils.Constants;
 import org.example.utils.DailoConstants;
 
 @Data
@@ -18,18 +19,10 @@ public abstract class AbstractSyncService implements AutomationProcess {
   private String DESCRIPTION_LOCATOR;
   private String CONTENT_LOCATOR_FROM;
   private String CONTENT_LOCATOR_TO;
-  private final String QUIT_KEYWORD = "QUIT";
-  private final double DEFAULT_TIMEOUT = 25000.0;
 
   protected AbstractSyncService(ArticleProvider provider) {
     this.provider = provider;
     this.chromeDriverService = new ChromeDriverService();
-    this.dailoSite = chromeDriverService.getBrowser().newPage();
-    this.dailoSite.setDefaultNavigationTimeout(DEFAULT_TIMEOUT);
-    this.dailoSite.setDefaultTimeout(DEFAULT_TIMEOUT);
-    this.newsSite = chromeDriverService.getBrowser().newPage();
-    this.newsSite.setDefaultNavigationTimeout(DEFAULT_TIMEOUT);
-    this.newsSite.setDefaultTimeout(DEFAULT_TIMEOUT);
   }
 
   public void doProcess() {
@@ -39,7 +32,23 @@ public abstract class AbstractSyncService implements AutomationProcess {
     afterProcess();
   }
 
-  protected abstract void initNewsSite();
+  protected abstract void doSetVariables();
+
+  @Override
+  public void beforeProcess() {
+    initBlankPages();
+    initDailo();
+    initNewsSite();
+  }
+
+  protected void initBlankPages() {
+    this.dailoSite = chromeDriverService.getBrowser().newPage();
+    this.dailoSite.setDefaultNavigationTimeout(Constants.DEFAULT_TIMEOUT);
+    this.dailoSite.setDefaultTimeout(Constants.DEFAULT_TIMEOUT);
+    this.newsSite = chromeDriverService.getBrowser().newPage();
+    this.newsSite.setDefaultNavigationTimeout(Constants.DEFAULT_TIMEOUT);
+    this.newsSite.setDefaultTimeout(Constants.DEFAULT_TIMEOUT);
+  }
 
   protected void initDailo() {
     chromeDriverService.openUrl(this.dailoSite, DailoConstants.DAILO_URL);
@@ -49,21 +58,18 @@ public abstract class AbstractSyncService implements AutomationProcess {
     chromeDriverService.openUrl(this.dailoSite, DailoConstants.DAILO_URL);
   }
 
-  protected abstract void doSetVariables();
-
-  @Override
-  public void beforeProcess() {
-    initDailo();
-    initNewsSite();
-  }
+  protected abstract void initNewsSite();
 
   @Override
   public void runProcess() {
     try (Scanner in = new Scanner(System.in)) {
+      System.out.println();
+      System.out.printf("-------------------------------%s------------------------------\n", provider.getName());
+      int counter = 0;
       while (true) {
-        System.out.printf("Enter %s's url (\"quit\" to exterminate the process): ", provider.getName());
+        System.out.printf("(Processed: %s) Enter url, \"exit\" to exit: ", counter);
         String url = in.nextLine();
-        if (Objects.isNull(url) || url.trim().equalsIgnoreCase(QUIT_KEYWORD)) {
+        if (Objects.nonNull(url) && url.trim().equalsIgnoreCase(Constants.EXIT_KEYWORD)) {
           return;
         }
         try {
@@ -71,9 +77,10 @@ public abstract class AbstractSyncService implements AutomationProcess {
           inputHeader();
           inputDescription();
           inputContent();
+          counter++;
         } catch (Exception e) {
-          System.out.println("Something wrong!");
-          System.out.println(e.getMessage());
+          System.out.println();
+          System.err.println(e.getMessage());
         }
       }
     }
