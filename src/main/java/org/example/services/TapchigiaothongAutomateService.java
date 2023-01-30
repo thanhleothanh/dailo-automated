@@ -11,10 +11,10 @@ public class TapchigiaothongAutomateService extends AbstractAutomateService {
 
   @Override
   protected void doSetVariables() {
-    this.setNEWS_SITE_URL(TapchigiaothongConstants.TAPCHIGIAOTHONG_URL);
-    this.setHEADER_LOCATOR(TapchigiaothongConstants.TAPCHIGIAOTHONG_HEADER);
-    this.setDESCRIPTION_LOCATOR(TapchigiaothongConstants.TAPCHIGIAOTHONG_DESCRIPTION);
-    this.setCONTENT_LOCATOR_FROM(TapchigiaothongConstants.TAPCHIGIAOTHONG_CONTENT_FROM);
-    this.setCONTENT_LOCATOR_TO(TapchigiaothongConstants.TAPCHIGIAOTHONG_CONTENT_TO);
+    this.setNewsSiteUrl(TapchigiaothongConstants.TAPCHIGIAOTHONG_URL);
+    this.setHeaderLocator(TapchigiaothongConstants.TAPCHIGIAOTHONG_HEADER);
+    this.setDescriptionLocator(TapchigiaothongConstants.TAPCHIGIAOTHONG_DESCRIPTION);
+    this.setContentLocatorFrom(TapchigiaothongConstants.TAPCHIGIAOTHONG_CONTENT_FROM);
+    this.setContentLocatorTo(TapchigiaothongConstants.TAPCHIGIAOTHONG_CONTENT_TO);
   }
 }

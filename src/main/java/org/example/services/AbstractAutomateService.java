@@ -19,11 +19,11 @@ public abstract class AbstractAutomateService implements AutomationProcess {
   protected Page dailoSite;
   protected Page newsSite;
   private ArticleProvider provider;
-  private String NEWS_SITE_URL;
-  private String HEADER_LOCATOR;
-  private String DESCRIPTION_LOCATOR;
-  private String CONTENT_LOCATOR_FROM;
-  private String CONTENT_LOCATOR_TO;
+  private String newsSiteUrl;
+  private String headerLocator;
+  private String descriptionLocator;
+  private String contentLocatorFrom;
+  private String contentLocatorTo;
 
   protected AbstractAutomateService(ArticleProvider provider) {
     this.provider = provider;
@@ -83,22 +83,22 @@ public abstract class AbstractAutomateService implements AutomationProcess {
   }
 
   private void inputHeader() {
-    chromeDriverService.copyInLocator(this.newsSite, HEADER_LOCATOR);
+    chromeDriverService.copyInLocator(this.newsSite, this.headerLocator);
     chromeDriverService.pasteToLocator(this.dailoSite, DailoConstants.DAILO_HEADER);
   }
 
   private void inputDescription() {
-    chromeDriverService.copyInLocator(this.newsSite, DESCRIPTION_LOCATOR);
+    chromeDriverService.copyInLocator(this.newsSite, this.descriptionLocator);
     chromeDriverService.pasteToLocator(this.dailoSite, DailoConstants.DAILO_DESCRIPTION_IFRAME);
   }
 
   private void inputContent() {
-    chromeDriverService.selectAndCopyInLocators(this.newsSite, CONTENT_LOCATOR_FROM, CONTENT_LOCATOR_TO);
+    chromeDriverService.selectAndCopyInLocators(this.newsSite, this.contentLocatorFrom, this.contentLocatorTo);
     chromeDriverService.pasteToLocator(this.dailoSite, DailoConstants.DAILO_CONTENT_IFRAME);
     chromeDriverService.typeToIFrameLocator(
         this.dailoSite,
         DailoConstants.DAILO_CONTENT_IFRAME,
         DailoConstants.DAILO_CONTENT_IFRAME_BODY,
-        newsSite.url());
+        this.newsSite.url());
   }
 }

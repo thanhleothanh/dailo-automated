@@ -11,10 +11,10 @@ public class VietnamplusAutomateService extends AbstractAutomateService {
 
   @Override
   protected void doSetVariables() {
-    this.setNEWS_SITE_URL(VietnamplusConstants.VIETNAMPLUS_URL);
-    this.setHEADER_LOCATOR(VietnamplusConstants.VIETNAMPLUS_HEADER);
-    this.setDESCRIPTION_LOCATOR(VietnamplusConstants.VIETNAMPLUS_DESCRIPTION);
-    this.setCONTENT_LOCATOR_FROM(VietnamplusConstants.VIETNAMPLUS_CONTENT_FROM);
-    this.setCONTENT_LOCATOR_TO(VietnamplusConstants.VIETNAMPLUS_CONTENT_TO);
+    this.setNewsSiteUrl(VietnamplusConstants.VIETNAMPLUS_URL);
+    this.setHeaderLocator(VietnamplusConstants.VIETNAMPLUS_HEADER);
+    this.setDescriptionLocator(VietnamplusConstants.VIETNAMPLUS_DESCRIPTION);
+    this.setContentLocatorFrom(VietnamplusConstants.VIETNAMPLUS_CONTENT_FROM);
+    this.setContentLocatorTo(VietnamplusConstants.VIETNAMPLUS_CONTENT_TO);
   }
 }

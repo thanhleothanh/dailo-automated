@@ -11,10 +11,10 @@ public class PhapluatplusAutomateService extends AbstractAutomateService {
 
   @Override
   protected void doSetVariables() {
-    this.setNEWS_SITE_URL(PhapluatplusConstants.PHAPLUATPLUS_URL);
-    this.setHEADER_LOCATOR(PhapluatplusConstants.PHAPLUATPLUS_HEADER);
-    this.setDESCRIPTION_LOCATOR(PhapluatplusConstants.PHAPLUATPLUS_DESCRIPTION);
-    this.setCONTENT_LOCATOR_FROM(PhapluatplusConstants.PHAPLUATPLUS_CONTENT_FROM);
-    this.setCONTENT_LOCATOR_TO(PhapluatplusConstants.PHAPLUATPLUS_CONTENT_TO);
+    this.setNewsSiteUrl(PhapluatplusConstants.PHAPLUATPLUS_URL);
+    this.setHeaderLocator(PhapluatplusConstants.PHAPLUATPLUS_HEADER);
+    this.setDescriptionLocator(PhapluatplusConstants.PHAPLUATPLUS_DESCRIPTION);
+    this.setContentLocatorFrom(PhapluatplusConstants.PHAPLUATPLUS_CONTENT_FROM);
+    this.setContentLocatorTo(PhapluatplusConstants.PHAPLUATPLUS_CONTENT_TO);
   }
 }
