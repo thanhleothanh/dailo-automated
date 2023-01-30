@@ -4,12 +4,16 @@ import com.microsoft.playwright.Page;
 import java.util.Objects;
 import java.util.Scanner;
 import lombok.Data;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.example.enums.ArticleProvider;
 import org.example.utils.Constants;
 import org.example.utils.DailoConstants;
 
 @Data
 public abstract class AbstractAutomateService implements AutomationProcess {
+
+  private static final Logger log = LogManager.getLogger(AbstractAutomateService.class);
 
   protected ChromeDriverService chromeDriverService;
   protected Page dailoSite;
@@ -52,13 +56,12 @@ public abstract class AbstractAutomateService implements AutomationProcess {
   @Override
   public void runProcess() {
     try (Scanner in = new Scanner(System.in)) {
-      System.out.println();
-      System.out.printf("-------------------------------%s-------------------------------\n", provider.getName());
+      log.info("-------------------------------{}-------------------------------", provider.getName());
       int counter = 0;
       while (true) {
-        System.out.printf("(Processed: %s) Enter url, \"exit\" to exit: ", counter);
+        log.info("(Processed: {}) Enter url, \"exit\" to exit: ", counter);
         String url = in.nextLine();
-        if (Objects.nonNull(url) && url.trim().equalsIgnoreCase(Constants.EXIT_KEYWORD)) {
+        if (Objects.isNull(url) || url.trim().equalsIgnoreCase(Constants.EXIT_KEYWORD)) {
           return;
         }
         try {
@@ -68,8 +71,7 @@ public abstract class AbstractAutomateService implements AutomationProcess {
           inputContent();
           counter++;
         } catch (Exception e) {
-          System.err.println(e.getMessage());
-          System.out.println();
+          log.error(e.getMessage());
         }
       }
     }
