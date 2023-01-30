@@ -1,18 +1,19 @@
 package org.example;
 
 import java.util.Scanner;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.example.enums.ArticleProvider;
 import org.example.services.PhapluatplusAutomateService;
 import org.example.services.TapchigiaothongAutomateService;
 import org.example.services.VietnamplusAutomateService;
 
 public class Main {
+  private static final Logger log = LogManager.getLogger(Main.class);
 
   public static void main(String[] args) {
     try (Scanner in = new Scanner(System.in)) {
-      System.out.println();
-      System.out.println("=================================================================================================");
-      System.out.printf("Choose an article provider %s: ", ArticleProvider.getArticleProviderNames());
+      log.info("Choose an article provider {}: ", ArticleProvider.getArticleProviderNames());
       String input = in.nextLine();
       ArticleProvider provider = ArticleProvider.of(input);
       switch (provider) {
@@ -29,7 +30,7 @@ public class Main {
           break;
       }
     }
-    System.out.println("Process ended!");
+    log.warn("Process ended!");
     System.exit(0);
   }
 }
