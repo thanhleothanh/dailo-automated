@@ -4,14 +4,14 @@
     <Console name="ConsoleAppender" target="SYSTEM_OUT">
       <PatternLayout pattern="%highlight{%d{HH:mm:ss.SSS} - %msg%n}{FATAL=red, ERROR=red, WARN=yellow, INFO=green, DEBUG=green bold, TRACE=blue}"/>
     </Console>
-    <File name="FileAppender" fileName="application-${date:yyyyMMdd}.log" immediateFlush="false" append="true">
-      <PatternLayout pattern="%highlight{%d{HH:mm:ss.SSS} - %msg%n}{FATAL=red, ERROR=red, WARN=yellow, INFO=green, DEBUG=green bold, TRACE=blue}"/>
-    </File>
+<!--    <File name="FileAppender" fileName="application-${date:yyyyMMdd}.log" immediateFlush="false" append="true">-->
+<!--      <PatternLayout pattern="%highlight{%d{HH:mm:ss.SSS} - %msg%n}{FATAL=red, ERROR=red, WARN=yellow, INFO=green, DEBUG=green bold, TRACE=blue}"/>-->
+<!--    </File>-->
   </Appenders>
   <Loggers>
     <Root level="debug">
       <AppenderRef ref="ConsoleAppender" />
-      <AppenderRef ref="FileAppender"/>
+<!--      <AppenderRef ref="FileAppender"/>-->
     </Root>
   </Loggers>
 </Configuration>
